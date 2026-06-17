@@ -1,0 +1,44 @@
+@import url("https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #e7e7ea;
+  font-family: "Satoshi", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.tab {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.scrl::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.scrl {
+  scrollbar-width: none;
+}
+
+.kbtn:active {
+  transform: translateY(1px);
+  opacity: 0.7;
+}
+
+.press:active {
+  transform: scale(0.97);
+}
