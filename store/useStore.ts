@@ -281,17 +281,27 @@ export const useStore = create<StoreState>()((set, get) => ({
       },
 
       reset: () => {
+        let ok = true;
+        try {
+          ok = window.confirm(
+            "Réinitialiser la démo ? Toutes tes opérations et objectifs reviendront aux données d'exemple."
+          );
+        } catch {}
+        if (!ok) return;
         // remet la démo en base puis recharge l'état depuis IndexedDB
         set({ screen: "home", sheetMode: null });
-        resetDb().then((data) =>
-          set({
-            currency: data.currency,
-            balance: data.balance,
-            streak: data.streak,
-            transactions: data.transactions,
-            goals: data.goals,
-            reminders: data.reminders,
+        resetDb()
+          .then((data) => {
+            set({
+              currency: data.currency,
+              balance: data.balance,
+              streak: data.streak,
+              transactions: data.transactions,
+              goals: data.goals,
+              reminders: data.reminders,
+            });
+            get().showToast("Démo réinitialisée", "rotate-ccw");
           })
-        );
+          .catch(() => get().showToast("Échec de la réinitialisation", "x"));
       },
 }));

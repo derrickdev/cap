@@ -72,6 +72,7 @@ export default function BottomSheet() {
         }}
       />
       <div
+        className="scrl"
         style={{
           position: "absolute",
           left: 0,
@@ -83,11 +84,15 @@ export default function BottomSheet() {
           transition: "transform .3s cubic-bezier(.22,1,.36,1)",
           transform: `translateY(${open ? "0%" : "105%"})`,
           boxShadow: "0 -10px 40px rgba(0,0,0,.2)",
+          // ne dépasse jamais l'écran : scroll interne si le contenu est trop haut
+          maxHeight: "calc(100dvh - env(safe-area-inset-top) - 8px)",
+          overflowY: "auto",
+          overscrollBehavior: "contain",
         }}
       >
         <div
           style={{
-            padding: "16px 20px 22px",
+            padding: "16px 20px calc(22px + env(safe-area-inset-bottom))",
             display: "flex",
             flexDirection: "column",
             gap: 14,
