@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { useStore } from "@/store/useStore";
 import { themeVars } from "@/lib/themes";
-import StatusBar from "@/components/StatusBar";
 import BottomNav from "@/components/BottomNav";
 import BottomSheet from "@/components/BottomSheet";
 import Toast from "@/components/Toast";
@@ -45,56 +44,48 @@ export default function Page() {
     }
   };
 
-  const showNav = screen !== "reminders" && screen !== "goalDetail";
-
   return (
     <div
       style={{
-        minHeight: "100vh",
+        position: "fixed",
+        inset: 0,
         display: "flex",
-        alignItems: "center",
         justifyContent: "center",
-        padding: 28,
+        background: "var(--bg)",
+        ...(themeVars(theme) as React.CSSProperties),
       }}
     >
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          maxWidth: 480,
+          height: "100%",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          background: "var(--bg)",
+          // safe-area iOS (encoche / barre d'état en standalone)
+          paddingTop: "env(safe-area-inset-top)",
+        }}
+      >
         <div
+          className="scrl"
           style={{
-            width: 390,
-            maxWidth: "100%",
-            background: "#111114",
-            padding: 11,
-            borderRadius: 58,
-            boxShadow: "0 40px 80px -24px rgba(0,0,0,.5)",
+            flex: 1,
+            overflowY: "auto",
+            overflowX: "hidden",
+            overscrollBehavior: "contain",
+            paddingTop: 10,
           }}
         >
-          <div
-            className="scrl"
-            style={{
-              position: "relative",
-              width: 368,
-              maxWidth: "100%",
-              height: 800,
-              borderRadius: 47,
-              overflow: "hidden",
-              display: "flex",
-              flexDirection: "column",
-              background: "var(--bg)",
-              ...(themeVars(theme) as React.CSSProperties),
-            }}
-          >
-            <StatusBar />
-
-            <div className="scrl" style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>
-              {hydrated ? renderScreen() : null}
-            </div>
-
-            <BottomNav />
-            <BottomSheet />
-            <Toast />
-            <NotificationManager />
-          </div>
+          {hydrated ? renderScreen() : null}
         </div>
+
+        <BottomNav />
+        <BottomSheet />
+        <Toast />
+        <NotificationManager />
       </div>
     </div>
   );

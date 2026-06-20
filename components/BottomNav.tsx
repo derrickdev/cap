@@ -50,7 +50,7 @@ export default function BottomNav() {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "11px 28px 20px",
+        padding: "11px 28px calc(20px + env(safe-area-inset-bottom))",
         background: "var(--nav)",
         borderTop: "1px solid var(--navL)",
         flex: "0 0 auto",
