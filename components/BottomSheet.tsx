@@ -21,7 +21,7 @@ export default function BottomSheet() {
   const signColor = isAlloc ? t.acc : s.entryType === "in" ? t.inc : t.exp;
 
   const allocG = s.goals.find((g) => g.id === s.allocGoal) ?? s.goals[0];
-  const sheetTitle = isAlloc ? "Allouer à " + allocG.name : "Nouvelle opération";
+  const sheetTitle = isAlloc ? "Allouer à " + (allocG?.name ?? "") : "Nouvelle opération";
 
   const inActive = s.entryType === "in";
   const inTabStyle: React.CSSProperties = inActive

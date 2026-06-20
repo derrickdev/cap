@@ -14,7 +14,7 @@ import { CATS } from "@/lib/categories";
 import { TODAY } from "@/lib/format";
 import { ThemeName } from "@/lib/themes";
 import { Currency, toFcfa } from "@/lib/currency";
-import { loadApp, putGoals, putMeta, putTx, resetDb } from "@/lib/db";
+import { emptyDb, loadApp, putGoals, putMeta, putTx, resetDb } from "@/lib/db";
 import { maybeGoalAlert } from "@/lib/notify";
 
 export type Screen =
@@ -86,7 +86,9 @@ type StoreState = {
 
   toggleRem: (k: keyof Reminders) => void;
   showToast: (msg: string, icon?: string) => void;
+  addGoal: () => void;
   reset: () => void;
+  clearAll: () => void;
 };
 
 let toastT1: ReturnType<typeof setTimeout> | undefined;
@@ -303,5 +305,58 @@ export const useStore = create<StoreState>()((set, get) => ({
             get().showToast("Démo réinitialisée", "rotate-ccw");
           })
           .catch(() => get().showToast("Échec de la réinitialisation", "x"));
+      },
+
+      addGoal: () => {
+        let name: string | null = null;
+        let targetStr: string | null = null;
+        try {
+          name = window.prompt("Nom du nouvel objectif ?");
+          if (name && name.trim()) {
+            targetStr = window.prompt("Montant cible (FCFA) ?", "100000");
+          }
+        } catch {}
+        if (!name || !name.trim()) return;
+        const target = Math.max(0, parseInt((targetStr || "0").replace(/\D/g, ""), 10) || 0);
+        if (!target) return;
+
+        const st = get();
+        const goal: Goal = {
+          id: "g" + Date.now(),
+          name: name.trim().slice(0, 24),
+          target,
+          saved: 0,
+          deadline: "Sans échéance",
+          icon: "target",
+          main: st.goals.length === 0, // 1er objectif = principal
+          monthly: Math.max(1000, Math.ceil(target / 12 / 1000) * 1000),
+        };
+        set({ goals: [...st.goals, goal] });
+        putGoals([goal]);
+        get().showToast("Objectif créé 🎯", "target");
+      },
+
+      clearAll: () => {
+        let ok = true;
+        try {
+          ok = window.confirm(
+            "Tout vider ? Toutes tes opérations et objectifs seront supprimés, le solde remis à 0. Action irréversible."
+          );
+        } catch {}
+        if (!ok) return;
+        set({ screen: "home", sheetMode: null, selGoal: "" });
+        emptyDb()
+          .then((data) => {
+            set({
+              currency: data.currency,
+              balance: data.balance,
+              streak: data.streak,
+              transactions: data.transactions,
+              goals: data.goals,
+              reminders: data.reminders,
+            });
+            get().showToast("Données vidées", "trash-2");
+          })
+          .catch(() => get().showToast("Échec du vidage", "x"));
       },
 }));

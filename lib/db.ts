@@ -145,6 +145,20 @@ export function putMeta(partial: Record<string, unknown>): Promise<unknown> {
   );
 }
 
+// Vide tout : aucune opération, aucun objectif, solde + série à 0.
+// theme / currency / reminders conservés.
+export async function emptyDb(): Promise<AppData> {
+  await db.transaction("rw", db.transactions, db.goals, db.meta, async () => {
+    await Promise.all([db.transactions.clear(), db.goals.clear()]);
+    await db.meta.bulkPut([
+      { key: "balance", value: 0 },
+      { key: "streak", value: 0 },
+      { key: "seeded", value: true },
+    ]);
+  });
+  return loadApp();
+}
+
 // Réinitialise la base aux données de démo. theme + currency conservés.
 export async function resetDb(): Promise<AppData> {
   await db.transaction("rw", db.transactions, db.goals, db.meta, async () => {

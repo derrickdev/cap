@@ -10,14 +10,14 @@ export default function GoalsScreen() {
   const s = useStore();
   const cur = s.currency;
   const { totalSaved, totalTarget } = goalTotals(s.goals);
-  const allPct = Math.round((totalSaved / totalTarget) * 100);
+  const allPct = totalTarget ? Math.round((totalSaved / totalTarget) * 100) : 0;
 
   return (
     <div style={{ padding: "6px 18px 26px", display: "flex", flexDirection: "column", gap: 13 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <span style={{ fontSize: 22, fontWeight: 900, color: "var(--ink)", letterSpacing: "-.02em" }}>Objectifs</span>
         <button
-          onClick={() => s.showToast("Création d’objectif — bientôt dans la démo", "target")}
+          onClick={() => s.addGoal()}
           className="press"
           style={{
             display: "inline-flex",
@@ -91,6 +91,12 @@ export default function GoalsScreen() {
           </button>
         );
       })}
+
+      {s.goals.length === 0 && (
+        <div style={{ textAlign: "center", color: "var(--fai)", fontWeight: 500, fontSize: 13, padding: "24px 12px" }}>
+          Aucun objectif. Tape « Nouvel » pour en créer un.
+        </div>
+      )}
     </div>
   );
 }

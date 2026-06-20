@@ -10,6 +10,22 @@ export default function GoalDetailScreen() {
   const s = useStore();
   const cur = s.currency;
   const dg = s.goals.find((g) => g.id === s.selGoal) ?? s.goals[0];
+  if (!dg) {
+    return (
+      <div style={{ padding: "6px 18px 26px", display: "flex", flexDirection: "column", gap: 14 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <button onClick={() => s.go("goals")} className="press" style={{ border: 0, background: "transparent", cursor: "pointer", color: "var(--ink)", display: "flex" }}>
+            <Icon name="chevron-left" size={26} strokeWidth={2.2} />
+          </button>
+          <span style={{ fontSize: 15, fontWeight: 800, color: "var(--ink)" }}>Objectif</span>
+          <span style={{ width: 26 }} />
+        </div>
+        <div style={{ textAlign: "center", color: "var(--fai)", fontWeight: 500, fontSize: 13, padding: "24px 12px" }}>
+          Cet objectif n&apos;existe plus.
+        </div>
+      </div>
+    );
+  }
   const { dpct, remain, projTitle, projSub, coach, history } = goalProjection(dg, s.transactions, cur);
 
   return (

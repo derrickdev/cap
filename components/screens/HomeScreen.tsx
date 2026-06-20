@@ -18,7 +18,7 @@ export default function HomeScreen() {
   const { monthIn, monthOut, net } = monthTotals(s.transactions);
   const { totalSaved } = goalTotals(s.goals);
   const mainGoal = mainGoalOf(s.goals);
-  const mpct = pct(mainGoal.saved, mainGoal.target);
+  const mpct = mainGoal ? pct(mainGoal.saved, mainGoal.target) : 0;
   const recent = s.transactions.slice(0, 3).map((x) => txToView(s.theme, x, cur));
   const netLabel = (net >= 0 ? "+" : "−") + shortAmt(Math.abs(net), cur);
 
@@ -152,6 +152,7 @@ export default function HomeScreen() {
       </div>
 
       {/* Objectif principal */}
+      {mainGoal ? (
       <button
         onClick={() => s.selectGoal(mainGoal.id)}
         className="press"
@@ -226,6 +227,33 @@ export default function HomeScreen() {
           </span>
         </div>
       </button>
+      ) : (
+        <button
+          onClick={() => s.addGoal()}
+          className="press"
+          style={{
+            textAlign: "left",
+            background: "var(--card)",
+            border: "1px dashed var(--line)",
+            borderRadius: 20,
+            padding: 16,
+            cursor: "pointer",
+            fontFamily: "inherit",
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            color: "var(--sub)",
+          }}
+        >
+          <span style={{ width: 40, height: 40, borderRadius: 12, background: "var(--accS)", color: "var(--acc)", display: "flex", alignItems: "center", justifyContent: "center", flex: "0 0 auto" }}>
+            <Icon name="plus" size={22} strokeWidth={2.4} />
+          </span>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 800, color: "var(--ink)" }}>Crée ton premier objectif</div>
+            <div style={{ fontSize: 12.5, color: "var(--fai)", fontWeight: 500, marginTop: 1 }}>Voiture, voyage, fonds d&apos;urgence…</div>
+          </div>
+        </button>
+      )}
 
       {/* Récent */}
       <div>
@@ -275,6 +303,11 @@ export default function HomeScreen() {
               </span>
             </div>
           ))}
+          {recent.length === 0 && (
+            <div style={{ padding: "16px 14px", textAlign: "center", fontSize: 12.5, color: "var(--fai)", fontWeight: 500 }}>
+              Aucune opération. Tape « + » pour en ajouter une.
+            </div>
+          )}
         </div>
       </div>
     </div>

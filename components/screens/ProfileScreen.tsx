@@ -115,11 +115,17 @@ export default function ProfileScreen() {
           </div>
           <span style={badge}>Bientôt</span>
         </div>
-        <button onClick={s.reset} className="press" style={{ width: "100%", textAlign: "left", border: 0, background: "transparent", fontFamily: "inherit", display: "flex", alignItems: "center", gap: 11, padding: "14px 15px", cursor: "pointer" }}>
-          <span style={{ color: "var(--exp)", display: "flex" }}>
+        <button onClick={s.reset} className="press" style={{ width: "100%", textAlign: "left", border: 0, borderBottom: "1px solid var(--line)", background: "transparent", fontFamily: "inherit", display: "flex", alignItems: "center", gap: 11, padding: "14px 15px", cursor: "pointer" }}>
+          <span style={{ color: "var(--ink)", display: "flex" }}>
             <Icon name="rotate-ccw" size={19} strokeWidth={2} />
           </span>
-          <span style={{ fontSize: 14, fontWeight: 700, color: "var(--exp)" }}>Réinitialiser la démo</span>
+          <span style={{ fontSize: 14, fontWeight: 700, color: "var(--ink)" }}>Remettre les données démo</span>
+        </button>
+        <button onClick={s.clearAll} className="press" style={{ width: "100%", textAlign: "left", border: 0, background: "transparent", fontFamily: "inherit", display: "flex", alignItems: "center", gap: 11, padding: "14px 15px", cursor: "pointer" }}>
+          <span style={{ color: "var(--exp)", display: "flex" }}>
+            <Icon name="trash-2" size={19} strokeWidth={2} />
+          </span>
+          <span style={{ fontSize: 14, fontWeight: 700, color: "var(--exp)" }}>Tout vider (repartir à zéro)</span>
         </button>
       </div>
 
