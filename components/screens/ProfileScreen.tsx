@@ -4,11 +4,20 @@ import Icon from "../Icon";
 import { useStore } from "@/store/useStore";
 import { THEMES } from "@/lib/themes";
 import { CURRENCIES, curSuffix } from "@/lib/currency";
+import { initials } from "@/lib/format";
 import { exportReport } from "@/lib/pdf";
 
 export default function ProfileScreen() {
   const s = useStore();
   const t = THEMES[s.theme];
+
+  const renameUser = () => {
+    let v: string | null = null;
+    try {
+      v = window.prompt("Ton nom ?", s.name);
+    } catch {}
+    if (v && v.trim()) s.setName(v);
+  };
 
   const exportPdf = async () => {
     try {
@@ -39,12 +48,17 @@ export default function ProfileScreen() {
 
   return (
     <div style={{ padding: "6px 18px 26px", display: "flex", flexDirection: "column", gap: 14 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 6 }}>
+      <div onClick={renameUser} className="press" style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 6, cursor: "pointer" }}>
         <div style={{ width: 54, height: 54, borderRadius: "50%", background: "var(--acc)", color: "var(--accT)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 18 }}>
-          AB
+          {initials(s.name)}
         </div>
-        <div>
-          <div style={{ fontSize: 19, fontWeight: 800, color: "var(--ink)" }}>Awa B.</div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+            <span style={{ fontSize: 19, fontWeight: 800, color: "var(--ink)" }}>{s.name || "Toi"}</span>
+            <span style={{ color: "var(--fai)", display: "flex" }}>
+              <Icon name="pencil-line" size={15} strokeWidth={2} />
+            </span>
+          </div>
           <div style={{ fontSize: 13, color: "var(--fai)", fontWeight: 500 }}>Compte personnel · {curSuffix(s.currency)}</div>
         </div>
       </div>

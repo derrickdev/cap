@@ -7,6 +7,7 @@ import BottomNav from "@/components/BottomNav";
 import BottomSheet from "@/components/BottomSheet";
 import Toast from "@/components/Toast";
 import NotificationManager from "@/components/NotificationManager";
+import Onboarding from "@/components/Onboarding";
 import HomeScreen from "@/components/screens/HomeScreen";
 import OpsScreen from "@/components/screens/OpsScreen";
 import GoalsScreen from "@/components/screens/GoalsScreen";
@@ -17,6 +18,7 @@ import ProfileScreen from "@/components/screens/ProfileScreen";
 export default function Page() {
   const screen = useStore((s) => s.screen);
   const theme = useStore((s) => s.theme);
+  const name = useStore((s) => s.name);
   const hydrated = useStore((s) => s.hydrated);
   const hydrate = useStore((s) => s.hydrate);
 
@@ -86,6 +88,7 @@ export default function Page() {
         <BottomSheet />
         <Toast />
         <NotificationManager />
+        {hydrated && !name && <Onboarding />}
       </div>
     </div>
   );

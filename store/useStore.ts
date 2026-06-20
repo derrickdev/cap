@@ -36,6 +36,7 @@ type StoreState = {
   // données persistées (IndexedDB via lib/db)
   theme: ThemeName;
   currency: Currency;
+  name: string;
   balance: number;
   streak: number;
   transactions: Transaction[];
@@ -66,6 +67,7 @@ type StoreState = {
   toggleTheme: () => void;
   setTheme: (t: ThemeName) => void;
   setCurrency: (c: Currency) => void;
+  setName: (n: string) => void;
   setScreen: (s: Screen) => void;
   selectGoal: (id: string) => void;
 
@@ -97,6 +99,7 @@ let toastT2: ReturnType<typeof setTimeout> | undefined;
 export const useStore = create<StoreState>()((set, get) => ({
   theme: "light",
   currency: "FCFA",
+  name: "",
   balance: SEED_BALANCE,
   streak: SEED_STREAK,
   transactions: SEED_TRANSACTIONS,
@@ -124,6 +127,7 @@ export const useStore = create<StoreState>()((set, get) => ({
         set({
           theme: data.theme,
           currency: data.currency,
+          name: data.name,
           balance: data.balance,
           streak: data.streak,
           transactions: data.transactions,
@@ -147,6 +151,11 @@ export const useStore = create<StoreState>()((set, get) => ({
       setCurrency: (currency) => {
         putMeta({ currency });
         set({ currency });
+      },
+      setName: (name) => {
+        const v = name.trim().slice(0, 24);
+        putMeta({ name: v });
+        set({ name: v });
       },
       setScreen: (screen) => set({ screen }),
       selectGoal: (id) => set({ selGoal: id, screen: "goalDetail" }),
@@ -296,6 +305,7 @@ export const useStore = create<StoreState>()((set, get) => ({
           .then((data) => {
             set({
               currency: data.currency,
+              name: data.name,
               balance: data.balance,
               streak: data.streak,
               transactions: data.transactions,
@@ -349,6 +359,7 @@ export const useStore = create<StoreState>()((set, get) => ({
           .then((data) => {
             set({
               currency: data.currency,
+              name: data.name,
               balance: data.balance,
               streak: data.streak,
               transactions: data.transactions,

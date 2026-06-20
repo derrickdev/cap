@@ -19,6 +19,7 @@ export type MetaRow = { key: string; value: unknown };
 export type AppData = {
   theme: ThemeName;
   currency: Currency;
+  name: string;
   balance: number;
   streak: number;
   reminders: Reminders;
@@ -66,6 +67,7 @@ function migrateFromLocalStorage(): Partial<AppData> | null {
       balance: s.balance,
       streak: s.streak,
       reminders: s.reminders,
+      name: typeof s.name === "string" ? s.name : undefined,
       transactions: Array.isArray(s.transactions) ? s.transactions : undefined,
       goals: Array.isArray(s.goals) ? s.goals : undefined,
     };
@@ -88,6 +90,7 @@ async function ensureSeeded(): Promise<void> {
     const metaRows: MetaRow[] = [
       { key: "theme", value: old?.theme ?? "light" },
       { key: "currency", value: old?.currency ?? "FCFA" },
+      { key: "name", value: old?.name ?? "" },
       { key: "balance", value: old?.balance ?? SEED_BALANCE },
       { key: "streak", value: old?.streak ?? SEED_STREAK },
       { key: "reminders", value: old?.reminders ?? DEFAULT_REMINDERS },
@@ -122,6 +125,7 @@ export async function loadApp(): Promise<AppData> {
   return {
     theme: (meta.theme as ThemeName) ?? "light",
     currency: (meta.currency as Currency) ?? "FCFA",
+    name: (meta.name as string) ?? "",
     balance: (meta.balance as number) ?? SEED_BALANCE,
     streak: (meta.streak as number) ?? SEED_STREAK,
     reminders: (meta.reminders as Reminders) ?? DEFAULT_REMINDERS,

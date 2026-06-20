@@ -15,3 +15,16 @@ export function short(n: number): string {
 
 /** Date du "jour" simulée (alignée sur le seed du design). */
 export const TODAY = "2026-06-13";
+
+/** "Awa B." -> "AB" ; "awa" -> "AW". Pour l'avatar. */
+export function initials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+}
+
+/** Premier mot du nom, pour le "Bonsoir, X". */
+export function firstName(name: string): string {
+  return name.trim().split(/\s+/)[0] || "";
+}

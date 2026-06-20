@@ -11,6 +11,7 @@ import {
   txToView,
 } from "@/lib/selectors";
 import { fmtAmt, shortAmt, curSuffix } from "@/lib/currency";
+import { firstName } from "@/lib/format";
 
 export default function HomeScreen() {
   const s = useStore();
@@ -44,7 +45,7 @@ export default function HomeScreen() {
               letterSpacing: "-.02em",
             }}
           >
-            Awa
+            {firstName(s.name) || "toi"}
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
